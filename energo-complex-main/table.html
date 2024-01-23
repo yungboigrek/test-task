@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Таблиці</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css" />
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header__wrapper">
+            <div class="header__logo">
+                <a href="/index.html">Енергокомплекс України</a>
+            </div>
+            <div class="header__menu">
+                <a href="/tables.html">Таблиці</a>
+                <a href="/information.html">Довідка</a>
+                <a href="/statistic.html">Статистика</a>
+                <div class="header__login">
+                    <span>Увійти</span>
+                    <div class="header__login-btn">
+                        <img src="img/icons/login.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tables">
+        <div class="tables__wrapper">
+            <h1 class="tables__name">Назва таблиці</h1>
+            <div class="table">
+                
+            </div>
+        </div>
+    </div>
+    <div class="genPDF">
+        <img src="img/icons/print.svg" alt="">
+    </div>
+    <div class="addBtn">
+        <img src="img/icons/plus.svg" alt="">
+    </div>
+    <div class="inputPopup">
+        <form data-action="add" data-edit="0" class="inputForm" action="">
+            <h2 class="inputPopup__label">Додати</h2>
+            <div class="inputForm__close"></div>
+        </form>
+    </div>
+    <div class="loadAnim"></div>
+    <div class="confirmPopup">
+        <div class="confirmPopup__content">
+            <h2>Ви дійсно хочете видалити елемент ?</h2>
+            <div data-delete="0" class="confirmPopup__buttons">
+                <button class="confirm">Так</button>
+                <button class="cancel">Ні</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer__wrapper">
+            <div class="footer__grid">
+                <div class="footer__logo">
+                    Енергокомплекс України
+                </div>
+                <div class="footer__links">
+                    <h2>Посилання</h2>
+                    <a href="/tables.html">Таблиці</a>
+                    <a href="/information.html">Довідка</a>
+                    <a href="/statistic.html">Статистика</a>
+                    <a href="index.html">Головна</a>   
+                </div>
+                <div class="footer__links">
+                    <h2>Соц. мережі</h2>
+                    <a href="">Instagram</a>
+                    <a href="">Telegram</a>
+                    <a href="">Facebook</a>
+                    <a href="">Github</a>   
+                </div>
+            </div>
+            <div class="footer__copyright">
+                Паламар Роман © 2023 КН-2-2
+            </div>
+        </div>
+    </div>
+    <script>
+        if(!localStorage.getItem("sessionId")){
+            window.open("/login.html","_self");
+        }
+        
+    </script>
+    <script src="js/table.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

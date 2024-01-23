@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Таблиці</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css" />
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header__wrapper">
+            <div class="header__logo">
+                <a href="/index.html">Енергокомплекс України</a>
+            </div>
+            <div class="header__menu">
+                <a href="/tables.html">Таблиці</a>
+                <a href="/information.html">Довідка</a>
+                <a href="/statistic.html">Статистика</a>
+                <div class="header__login">
+                    <span>Увійти</span>
+                    <div class="header__login-btn">
+                        <img src="img/icons/login.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tables">
+        <div class="tables__wrapper">
+            <h1 class="tables__name">Таблиці</h1>
+            <div class="tables-container">
+                
+            </div>
+        </div>
+    </div>
+    <div class="loadAnim"></div>
+    <div class="footer">
+        <div class="footer__wrapper">
+            <div class="footer__grid">
+                <div class="footer__logo">
+                    Енергокомплекс України
+                </div>
+                <div class="footer__links">
+                    <h2>Посилання</h2>
+                    <a href="/tables.html">Таблиці</a>
+                    <a href="/information.html">Довідка</a>
+                    <a href="/statistic.html">Статистика</a>
+                    <a href="index.html">Головна</a>   
+                </div>
+                <div class="footer__links">
+                    <h2>Соц. мережі</h2>
+                    <a href="">Instagram</a>
+                    <a href="">Telegram</a>
+                    <a href="">Facebook</a>
+                    <a href="">Github</a>   
+                </div>
+            </div>
+            <div class="footer__copyright">
+                Паламар Роман © 2023 КН-2-2
+            </div>
+        </div>
+    </div>
+    <script>
+        let tableWrapper = document.querySelector(".tables-container");
+        if(localStorage.getItem("sessionId")){
+            fetch(`http://localhost:8080/tables?session=${localStorage.getItem("sessionId")}`).then(response => response.json())
+            .then(responeObj=>{
+                responeObj.forEach((table)=>{
+                    tableWrapper.innerHTML+=`<a href="/table.html?table=${table}" class="tables-container__item">${table}</a>`;
+                });
+            })
+            .catch(error => {
+                new Notify ({
+                        status: 'error',
+                        title: 'Помилка',
+                        text: `${error}`,
+                        effect: 'slide',
+                        speed: 300,
+                        customClass: '',
+                        customIcon: '',
+                        showIcon: true,
+                        showCloseButton: true,
+                        autoclose: true,
+                        autotimeout: 3000,
+                        gap: 20,
+                        distance: 20,
+                        type: 2,
+                        position: 'right top'
+                    })
+            });
+        }
+        else{
+            window.open("/login.html","_self");
+            
+        }
+        
+    </script>
+    <script src="js/app.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

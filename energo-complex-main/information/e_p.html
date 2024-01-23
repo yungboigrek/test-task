@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Енергопостачання підприємства</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css" />
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header__wrapper">
+            <div class="header__logo">
+                <a href="/index.html">Енергокомплекс України</a>
+            </div>
+            <div class="header__menu">
+                <a href="/tables.html">Таблиці</a>
+                <a href="/information.html">Довідка</a>
+                <a href="/statistic.html">Статистика</a>
+                <div class="header__login">
+                    <span>Увійти</span>
+                    <div class="header__login-btn">
+                        <img src="../img/icons/login.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tables">
+        <div class="tables__wrapper">
+            <h1 class="tables__name">Назва таблиці</h1>
+            <div class="table">
+                
+            </div>
+        </div>
+    </div>
+    <div class="genPDF">
+        <img src="../img/icons/print.svg" alt="">
+    </div>
+    <div class="addBtn">
+        <img src="../img/icons/plus.svg" alt="">
+    </div>
+    <div class="inputPopup">
+        <form data-action="add" data-edit="0" class="inputForm" action="">
+            <h2 class="inputPopup__label">Параметри</h2>
+            <div class="inputForm__close"></div>
+        </form>
+    </div>
+    <div class="loadAnim"></div>
+    <div class="footer">
+        <div class="footer__wrapper">
+            <div class="footer__grid">
+                <div class="footer__logo">
+                    Енергокомплекс України
+                </div>
+                <div class="footer__links">
+                    <h2>Посилання</h2>
+                    <a href="/tables.html">Таблиці</a>
+                    <a href="/information.html">Довідка</a>
+                    <a href="/statistic.html">Статистика</a>
+                    <a href="index.html">Головна</a>   
+                </div>
+                <div class="footer__links">
+                    <h2>Соц. мережі</h2>
+                    <a href="">Instagram</a>
+                    <a href="">Telegram</a>
+                    <a href="">Facebook</a>
+                    <a href="">Github</a>   
+                </div>
+            </div>
+            <div class="footer__copyright">
+                Паламар Роман © 2023 КН-2-2
+            </div>
+        </div>
+    </div>
+    <script src="../js/customSQL.js"></script>
+    <script>
+        if(!localStorage.getItem("sessionId")){
+            window.open("/login.html","_self");
+        }
+        formCont.style.display="flex";
+        fetch(`http://localhost:8080/dropdown?table=Енергетичні підприємства&for=Підприємство&session=${localStorage.getItem("sessionId")}`)
+        .then(response => response.json())
+        .then(responseObj => {
+            form.innerHTML+=`<label for="Підприємство">Підприємство</label>${responseObj.html}`;
+            form.innerHTML+=`<input type="submit" value="Пошук">`;
+            //close button
+            const closeBtn = document.querySelector(".inputForm__close");
+            form.addEventListener("click",(e)=>{
+                if(e.target == closeBtn){
+                    formCont.style.display="none";
+                } 
+            });
+        })
+        .catch(err=>{
+            new Notify ({
+                status: 'error',
+                title: 'Помилка',
+                text: `Щось пішло не так... ${err} `,
+                effect: 'slide',
+                speed: 300,
+                customClass: '',
+                customIcon: '',
+                showIcon: true,
+                showCloseButton: true,
+                autoclose: true,
+                autotimeout: 3000,
+                gap: 20,
+                distance: 20,
+                type: 2,
+                position: 'right top'
+            })
+        });
+
+        form.addEventListener("submit",(e)=>{
+            e.preventDefault();
+            const inputValue = document.querySelector("[name='Підприємство']");
+            const value = inputValue.value;
+            document.querySelector(".tables__name").innerHTML =  inputValue.options[inputValue.selectedIndex].text;
+            query = `SELECT 
+                e.ID,
+                e.Дата,
+                r.Назва AS Енергоресурс,
+                e.Обсяг
+                FROM
+                \`Енергопостачання\` e
+                INNER JOIN \`Енергетичні підприємства\` p ON e.Підприємство = p.ID
+                INNER JOIN \`Енергоресурси\` r ON e.Енергоресурс = r.ID
+                WHERE
+                p.ID =${value}`;
+            fetch(`http://localhost:8080/sql?query=${query}&session=${localStorage.getItem("sessionId")}`)
+            .then(response => {
+
+                if(response.ok){
+                    new Notify ({
+                        status: 'success',
+                        title: 'Успішно',
+                        text: 'Успішно знайдено записи.',
+                        effect: 'slide',
+                        speed: 300,
+                        customClass: '',
+                        customIcon: '',
+                        showIcon: true,
+                        showCloseButton: true,
+                        autoclose: true,
+                        autotimeout: 3000,
+                        gap: 20,
+                        distance: 20,
+                        type: 2,
+                        position: 'right top'
+                    })
+                    return response.json();
+                }else{
+                    throw new Error("Перевірте правильність данних");
+                }
+            })
+            .then(responseObj =>{
+                
+                tableObj= responseObj;
+                tableWrapper.innerHTML="";
+                formCont.style.display="none";
+                generateTable(tableObj,"ID",false);
+            })
+            .catch(err=>{
+                new Notify ({
+                    status: 'error',
+                    title: 'Помилка',
+                    text: `Щось пішло не так... ${err} `,
+                    effect: 'slide',
+                    speed: 300,
+                    customClass: '',
+                    customIcon: '',
+                    showIcon: true,
+                    showCloseButton: true,
+                    autoclose: true,
+                    autotimeout: 3000,
+                    gap: 20,
+                    distance: 20,
+                    type: 2,
+                    position: 'right top'
+                })
+            });
+            
+    });
+    </script>
+    <script src="../js/app.js"></script>
+    <script src="../js/login.js"></script>
+</body>
+</html>
